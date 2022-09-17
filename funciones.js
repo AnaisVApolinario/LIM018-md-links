@@ -52,11 +52,10 @@ const extractLinks = (pathAbsolute) => {
   return arrayObjetosLinks;
 };
 const r = extractLinks(getAbsolutePath(pathis));
-console.log(r);
 
-const statusLinks = (paths) => {
-  const arrayObjects = extractLinks(paths);
-  const arrayPromesas = arrayObjects.map((objLink) => {
+const statusLinks = (arrayObjetos) => {
+  // const arrayObjects = extractLinks(paths);
+  const arrayPromesas = arrayObjetos.map((objLink) => {
     return fetch(objLink.href)
       .then((res) => {
         if (res.status >= 200 && res.status < 400) {
@@ -75,11 +74,11 @@ const statusLinks = (paths) => {
         };
       });
   });
-  Promise.all(arrayPromesas).then((result) => {
-    return result;
-  });
+  return Promise.all(arrayPromesas);
 };
-console.log(statusLinks(pathis));
+statusLinks(r).then((result) => {
+  console.log(result);
+});
 
 module.exports = {
   isMd,
