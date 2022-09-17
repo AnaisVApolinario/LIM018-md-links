@@ -1,75 +1,90 @@
-const fetch = require('node-fetch')
+const pathis = './miReadme.md';
+const fetch = require('node-fetch');
 const path = require('path');
 const fs = require('fs');
-// ver si la ruta es absoluta
-// convertir la ruta relativa en  absoluta
-const getAbsolutePath = (pathToResolve) => {
-  return path.isAbsolute(pathToResolve) ?pathToResolve : path.resolve(pathToResolve)
-}
+// comprobar si el archivo es existe y es md
 const isMd = (paths) => {
+  // comprobar si existe
   const pathExists = fs.existsSync(paths);
-  if(!pathExists){
-    console.error('La ruta no existe!')
-    return
+  if (!pathExists) {
+    return false;
   }
-
-  const pathAbsolute = getAbsolutePath(paths)
-  
-  // extraer la extencion que tiene el archivo
-  const pathMd = path.extname(pathAbsolute);
-  if(pathMd == '.md'){
-    return pathAbsolute
-  } else console.log('El archivo no es md');
-}
+  // verificar si es md
+  const pathMd = path.extname(paths);
+  if (pathMd === '.md') {
+    return true;
+  }
+  return false;
+};
 
 // console.log(isMd(path, {validate: false, stats: true}));
 
-const readFile = (file) => {
-  return fs.readFileSync(file,'utf-8');
-}
+// ver si la ruta es absoluta o convertir la ruta relativa en  absoluta
+const getAbsolutePath = (paths) => {
+  return path.isAbsolute(paths) ? paths : path.resolve(paths);
+};
 
-const extractLinks = (paths) => {
-  const regExp = /\[(.+)\]\((https?:\/\/.+)\)/gi;
-  const fileMd = isMd(paths);
-  const fileLinks = readFile(fileMd).match(regExp);
-  if (fileLinks === null) {
+// Leer el archivo
+const readFile = (fileAbsolutePath) => {
+  return fs.readFileSync(fileAbsolutePath, 'utf-8');
+};
+// console.log(readFile(getAbsolutePath(pathis)));
+
+const extractLinks = (pathAbsolute) => {
+  const textHttps = /\[(.+)\]\((https?:\/\/.+)\)/gi;
+  const readFileAbsolutePath = readFile(pathAbsolute);
+  const arrayTextHtpps = readFileAbsolutePath.match(textHttps);
+  if (arrayTextHtpps === null) {
     return [];
   }
-  const newFilelinks= fileLinks.map((links) => {
+  const arrayObjetosLinks = arrayTextHtpps.map((links) => {
     const textLink = /\[[^\s]+(.+?)\]/gi;
-    const matchText = links.match(textLink)
+    const matchText = links.match(textLink);
     const httpsLink = /\((https?.+?)\)/gi;
     const matchHttp = links.match(httpsLink);
     const objLinks = {
-      href : matchHttp[0].slice(1,-1),
-      text: matchText[0].slice(1,-1),
-      file: paths
-    }
+      href: matchHttp[0].slice(1, -1),
+      text: matchText[0].slice(1, -1),
+      file: pathAbsolute,
+    };
     return objLinks;
-});
-return newFilelinks;
-}
+  });
+  return arrayObjetosLinks;
+};
+const r = extractLinks(getAbsolutePath(pathis));
+console.log(r);
 
 const statusLinks = (paths) => {
-  const arrayObjects= extractLinks(paths);
-  const promesas = arrayObjects.map((objLink) => {
+  const arrayObjects = extractLinks(paths);
+  const arrayPromesas = arrayObjects.map((objLink) => {
     return fetch(objLink.href)
-      .then(res => {
-        if(res.status < 400){
-          const objLinks2 = {
+      .then((res) => {
+        if (res.status >= 200 && res.status < 400) {
+          return {
             ...objLink,
             status: res.status,
-            statusText: res.statusText 
-          }
-          return objLinks2;
+            statusText: res.statusText,
+            message: 'ok',
+          };
         }
-      })
-      .catch( (err) => {
-        console.log(err)
-      })
-  })
-  Promise.all(promesas).then((result) =>{
+        return {
+          ...objLink,
+          status: res.status,
+          statusText: res.statusText,
+          message: 'fail',
+        };
+      });
+  });
+  Promise.all(arrayPromesas).then((result) => {
     return result;
   });
 };
-module.exports = { getAbsolutePath , isMd, readFile, extractLinks, statusLinks }
+console.log(statusLinks(pathis));
+
+module.exports = {
+  isMd,
+  getAbsolutePath,
+  readFile,
+  extractLinks,
+  statusLinks,
+};
