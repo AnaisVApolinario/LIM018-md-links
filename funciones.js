@@ -2,13 +2,11 @@ const pathis = './miReadme.md';
 const fetch = require('node-fetch');
 const path = require('path');
 const fs = require('fs');
-// comprobar si el archivo es existe y es md
+// comprobar si el archivo existe
+const pathExists = (paths) => fs.existsSync(paths);
+
+// comprobar si el archivo es md
 const isMd = (paths) => {
-  // comprobar si existe
-  const pathExists = fs.existsSync(paths);
-  if (!pathExists) {
-    return false;
-  }
   // verificar si es md
   const pathMd = path.extname(paths);
   if (pathMd === '.md') {
@@ -51,7 +49,7 @@ const extractLinks = (pathAbsolute) => {
   });
   return arrayObjetosLinks;
 };
-const r = extractLinks(getAbsolutePath(pathis));
+// const r = extractLinks(getAbsolutePath(pathis));
 
 const statusLinks = (arrayObjetos) => {
   // const arrayObjects = extractLinks(paths);
@@ -76,9 +74,9 @@ const statusLinks = (arrayObjetos) => {
   });
   return Promise.all(arrayPromesas);
 };
-statusLinks(r).then((result) => {
-  console.log(result);
-});
+// statusLinks(r).then((result) => {
+//   console.log(result);
+// });
 
 module.exports = {
   isMd,
@@ -86,4 +84,5 @@ module.exports = {
   readFile,
   extractLinks,
   statusLinks,
+  pathExists,
 };
