@@ -16,7 +16,7 @@ const mdLinks = (path, options) => {
       links = arrayObjetos;
       resolve(links);
     }
-    links = func.statusLinks(arrayObjetos);
+    links = func.validateLinks(arrayObjetos);
     resolve(links);
   });
 };
@@ -24,3 +24,4 @@ mdLinks(paths, { validate: false })
   .then((result) => {
     console.log(result);
   });
+module.exports = mdLinks;

@@ -1,4 +1,4 @@
-const pathis = './miReadme.md';
+// const pathis = './miReadme.md';
 const fetch = require('node-fetch');
 const path = require('path');
 const fs = require('fs');
@@ -51,7 +51,7 @@ const extractLinks = (pathAbsolute) => {
 };
 // const r = extractLinks(getAbsolutePath(pathis));
 
-const statusLinks = (arrayObjetos) => {
+const validateLinks = (arrayObjetos) => {
   // const arrayObjects = extractLinks(paths);
   const arrayPromesas = arrayObjetos.map((objLink) => {
     return fetch(objLink.href)
@@ -74,15 +74,49 @@ const statusLinks = (arrayObjetos) => {
   });
   return Promise.all(arrayPromesas);
 };
-// statusLinks(r).then((result) => {
-//   console.log(result);
+// const va = validateLinks(r).then((result) => {
+//   return result;
 // });
 
+const statsLinks = (arrObjLinks) => {
+  return arrObjLinks.then((objLink) => {
+    const arrayLinks = objLink.map((link) => {
+      return link.href;
+    });
+    const totalLinks = arrayLinks.length;
+    const uniqueLinks = [];
+    arrayLinks.forEach((link) => {
+      if (!uniqueLinks.includes(link)) {
+        uniqueLinks.push(link);
+      }
+    });
+    return { totalLinks, uniqueLinks: uniqueLinks.length };
+  });
+};
+// statsLinks(va)
+//   .then((re) => {
+//     console.log(re);
+//   });
+
+const brokenLinks = (arrObjLinks) => {
+  return arrObjLinks.then((objLink) => {
+    return objLink.filter((link) => {
+      return link.message === 'fail';
+    }).length;
+  });
+};
+// brokenLinks(va)
+//   .then((e) => {
+//     console.log(e);
+//   });
+
 module.exports = {
-  isMd,
+  pathExists,
   getAbsolutePath,
+  isMd,
   readFile,
   extractLinks,
-  statusLinks,
-  pathExists,
+  validateLinks,
+  statsLinks,
+  brokenLinks,
 };
