@@ -13,7 +13,8 @@
     "test": "jest --coverage",
     "start": "node index",
     "eslint": "eslint --ext .js test/",
-    "pretest": "npm run eslint"
+    "pretest": "npm run eslint",
+    "md-links": "cli.js"
   },
   "repository": {
     "type": "git",
@@ -23,7 +24,7 @@
   "author": "Anais Valverde",
   "license": "ISC",
   "bin": {
-    "cli": "cli.js"
+    "md-links": "cli.js"
   },
   "bugs": {
     "url": "https://github.com/AnaisVApolinario/LIM018-md-links/issues"
@@ -38,6 +39,7 @@
   },
   "dependencies": {
     "chalk": "^5.0.1",
+    "link": "^1.5.1",
     "node-fetch": "^2.6.7",
     "yargs": "^17.5.1"
   }
