@@ -32,9 +32,6 @@ const extractLinks = (pathAbsolute) => {
   const textHttps = /\[(.+)\]\((https?:\/\/.+)\)/gi;
   const readFileAbsolutePath = readFile(pathAbsolute);
   const arrayTextHtpps = readFileAbsolutePath.match(textHttps);
-  if (arrayTextHtpps === null) {
-    return [];
-  }
   const arrayObjetosLinks = arrayTextHtpps.map((links) => {
     const textLink = /\[[^\s]+(.+?)\]/gi;
     const matchText = links.match(textLink);

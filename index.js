@@ -12,6 +12,9 @@ const mdLinks = (path, options) => {
       reject(new Error('¡No hay archivos con extencion .md!'));
     }
     const arrayObjetos = func.extractLinks(absolute);
+    // if (arrayObjetos === null) {
+    //   reject(new Error('El archivo no contiene'));
+    // }
     if (!options.validate) {
       links = arrayObjetos;
       resolve(links);

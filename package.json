@@ -24,7 +24,7 @@
   "author": "Anais Valverde",
   "license": "ISC",
   "bin": {
-    "md-links": "cli.js"
+    "md-links": "./cli.js"
   },
   "bugs": {
     "url": "https://github.com/AnaisVApolinario/LIM018-md-links/issues"
@@ -38,7 +38,7 @@
     "jest": "^29.0.2"
   },
   "dependencies": {
-    "chalk": "^5.0.1",
+    "chalk": "^4.1.2",
     "link": "^1.5.1",
     "node-fetch": "^2.6.7",
     "yargs": "^17.5.1"
