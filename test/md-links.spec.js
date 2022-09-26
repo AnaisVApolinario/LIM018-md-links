@@ -1,8 +1,9 @@
 /* eslint-disable no-undef */
-const fetch = require('node-fetch');
+// const fetch = require('node-fetch');
 const func = require('../funciones.js');
 
-jest.mock('node-fecth.js'); // activamos el mock;
+// jest.mock('node-fecth.js'); // activamos el mock;
+jest.mock('node-fetch');
 
 describe('path exists', () => {
   const path = './miReadme.md';
@@ -11,41 +12,60 @@ describe('path exists', () => {
     expect(typeof func.pathExists).toBe('function');
   });
   it('the path exists', () => {
-    expect(func.pathExists(path)).toBe(true);
+    expect(func.pathExists(path)).toBeTruthy();
   });
   it('the path does not exist', () => {
-    expect(func.pathExists(path2)).toBe(false);
+    expect(func.pathExists(path2)).toBeFalsy();
   });
 });
 
-describe('path is absolute', () => {
-  // DADO
-  const path = 'D:\\Laboratoria\\LIM018-md-links\\miReadme.md';
-  it('ruta absoluta', () => {
-    // CUANDO
-    func.getAbsolutePath(path);
-    // ENTONCES
-    expect(func.getAbsolutePath(path)).toBe(path);
+describe('path with extension md ', () => {
+  const path = './miReadme.md';
+  const path2 = './perro.png';
+
+  it('is isMd a function', () => {
+    expect(typeof func.isMd).toBe('function');
   });
-  it('convertir ruta relativa a ruta absoluta', () => {
-    // DADO
-    const path2 = './miReadme.md';
-    // CUANDO
-    func.getAbsolutePath(path2);
-    // ENTONCES
-    expect(func.getAbsolutePath(path2)).toBe(path);
+
+  it('si es extension md', () => {
+    expect(func.isMd(path)).toBeTruthy();
+  });
+
+  it('no es extension md', () => {
+    expect(func.isMd(path2)).toBeFalsy();
   });
 });
-describe('fetch', () => {
-  const arrObj = [{
-    href: 'https://yargs.js.org/',
-    text: 'Yargs',
-    file: './miReadme.md',
-  }];
-  it.only('fetch', () => {
-    func.validateLinks(arrObj)
-      .then((result) => {
-        expect(result).toEqual([{}]);
-      });
+
+describe('extract Links', () => {
+  it('archivo esta vacio', () => {
+    const path1 = './prueba1.md';
+    const mensaje = 'El archivo esta vacio';
+    expect(func.extractLinks(path1)).toBe(mensaje);
   });
+
+  it('archivo no contiene links', () => {
+    const path2 = './prueba2.md';
+    const mensaje = 'El archivo no contiene links';
+    expect(func.extractLinks(path2)).toBe(mensaje);
+  });
+
+  it('archivo con links, extraer los link', () => {
+    const path = './miReadme.md';
+    const objetos = [
+      {
+        href: 'https://jestjs.io/docs/es-ES/getting-stated',
+        text: 'Empezando con Jest - Documentación oficial',
+        file: './miReadme.md',
+      },
+      {
+        href: 'https://jestjs.io/docs/es-ES/asynchronous',
+        text: 'Tests de código asincrónico con Jest - Documentación oficial',
+        file: './miReadme.md',
+      },
+    ];
+    expect(func.extractLinks(path)).toEqual(objetos);
+  });
+});
+describe('validate Links', () => {
+
 });

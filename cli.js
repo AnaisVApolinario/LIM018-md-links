@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 const { statsLinks, brokenLinks } = require('./funciones');
 const chalk = require('chalk');
+
 const mdLinks = require('./index.js');
 
 const argv = process.argv;
@@ -23,19 +24,37 @@ if (argv.length === 3 && argv[3] === undefined) {
       console.log(result);
     })
     .catch(() => {
-      console.log(chalk.red.italic('El archivo no contiene links'));
+      console.log('Hola');
     });
 }
-if (argv[3] === '--validate') {
+let validate = argv.includes("--validate");
+
+const arrayObjectsLinksPromise = mdLinks(argv[2], { validate })
+  .then((resultado) => {
+    return resultado;
+  });
+
+if (argv[3] === '--validate' && argv[4] === undefined) {
   mdLinks(argv[2], { validate: true })
     .then((result) => {
       console.log(result);
     });
+} else if (argv[3] === '--stats') {
+  statsLinks(arrayObjectsLinksPromise)
+    .then((stats) => {
+      console.log('Total de Links: ', stats.totalLinks);
+      console.log('Links Unicos: ', stats.uniqueLinks);
+    });
 }
-if (argv[3] === '--stats') {
-  mdLinks(argv[2], { validate: true })
-    .then((resultado) => {
-      console.log(statsLinks());
-      console.log(statsLinks(resultado));
+
+if (argv[3] === '--validate' && argv[4] === '--stats') {
+  statsLinks(arrayObjectsLinksPromise)
+    .then((stats) => {
+      console.log('Total de Links: ', stats.totalLinks);
+      console.log('Links Unicos: ', stats.uniqueLinks);
+    });
+  brokenLinks(arrayObjectsLinksPromise)
+    .then((result) => {
+      console.log('Links Rotos', result);
     });
 }

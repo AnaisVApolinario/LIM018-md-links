@@ -1,6 +1,6 @@
-const fn = (url) => {
-  // promesa
-  // cuando se resuelva devuelve el status y el status text
-  console.log(url);
-};
-module.exports = fn;
+/* eslint-disable no-undef */
+/* eslint-disable no-unused-vars */
+const fetch = jest.fn((url) => {
+  return Promise.resolve({});
+});
+module.exports = fetch;

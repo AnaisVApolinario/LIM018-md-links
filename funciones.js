@@ -2,10 +2,19 @@
 const fetch = require('node-fetch');
 const path = require('path');
 const fs = require('fs');
-// comprobar si el archivo existe
+// // Lee el contenido del directorio
+// const readDir = (paths) => fs.readdirSync(paths);
+
+// // VERIFICAR SI ES UN DIRECTORIO
+// const isDirectory = (paths) => fs.lstatSync(paths).isDirectory();
+
+// // VERIFICAR SI ES UN ARCHIVO
+// const isFile = (paths) => fs.lstatSync(paths).isFile();
+
+// COMPROBAR SI EL ARCHIVO EXISTE
 const pathExists = (paths) => fs.existsSync(paths);
 
-// comprobar si el archivo es md
+// COMPROBAR SI EL ARCHIVO ES MD
 const isMd = (paths) => {
   // verificar si es md
   const pathMd = path.extname(paths);
@@ -17,21 +26,22 @@ const isMd = (paths) => {
 
 // console.log(isMd(path, {validate: false, stats: true}));
 
-// ver si la ruta es absoluta o convertir la ruta relativa en  absoluta
+// VER SI LA RUTA ES ABSOLUTA O CONVERTIR LA RUTA RELATIVA EN ABSOLUTA
 const getAbsolutePath = (paths) => {
   return path.isAbsolute(paths) ? paths : path.resolve(paths);
 };
 
-// Leer el archivo
-const readFile = (fileAbsolutePath) => {
-  return fs.readFileSync(fileAbsolutePath, 'utf-8');
-};
 // console.log(readFile(getAbsolutePath(pathis)));
-
 const extractLinks = (pathAbsolute) => {
   const textHttps = /\[(.+)\]\((https?:\/\/.+)\)/gi;
-  const readFileAbsolutePath = readFile(pathAbsolute);
+  const readFileAbsolutePath = fs.readFileSync(pathAbsolute, 'utf-8');
   const arrayTextHtpps = readFileAbsolutePath.match(textHttps);
+  if (readFileAbsolutePath === '') {
+    return [];
+  }
+  if (arrayTextHtpps === null) {
+    return [];
+  }
   const arrayObjetosLinks = arrayTextHtpps.map((links) => {
     const textLink = /\[[^\s]+(.+?)\]/gi;
     const matchText = links.match(textLink);
@@ -46,7 +56,8 @@ const extractLinks = (pathAbsolute) => {
   });
   return arrayObjetosLinks;
 };
-// const r = extractLinks(getAbsolutePath(pathis));
+// const r = extractLinks(getAbsolutePath('./prueba2.md'));
+// console.log(r);
 
 const validateLinks = (arrayObjetos) => {
   // const arrayObjects = extractLinks(paths);
@@ -111,7 +122,6 @@ module.exports = {
   pathExists,
   getAbsolutePath,
   isMd,
-  readFile,
   extractLinks,
   validateLinks,
   statsLinks,
