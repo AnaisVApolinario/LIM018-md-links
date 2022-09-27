@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-// const fetch = require('node-fetch');
+const fetch = require('node-fetch');
 const func = require('../funciones.js');
 
 // jest.mock('node-fecth.js'); // activamos el mock;
@@ -39,14 +39,12 @@ describe('path with extension md ', () => {
 describe('extract Links', () => {
   it('archivo esta vacio', () => {
     const path1 = './prueba1.md';
-    const mensaje = 'El archivo esta vacio';
-    expect(func.extractLinks(path1)).toBe(mensaje);
+    expect(func.extractLinks(path1)).toEqual([]);
   });
 
   it('archivo no contiene links', () => {
     const path2 = './prueba2.md';
-    const mensaje = 'El archivo no contiene links';
-    expect(func.extractLinks(path2)).toBe(mensaje);
+    expect(func.extractLinks(path2)).toEqual([]);
   });
 
   it('archivo con links, extraer los link', () => {
@@ -55,17 +53,86 @@ describe('extract Links', () => {
       {
         href: 'https://jestjs.io/docs/es-ES/getting-stated',
         text: 'Empezando con Jest - Documentación oficial',
-        file: './miReadme.md',
+        file: path,
       },
       {
         href: 'https://jestjs.io/docs/es-ES/asynchronous',
         text: 'Tests de código asincrónico con Jest - Documentación oficial',
-        file: './miReadme.md',
+        file: path,
       },
     ];
     expect(func.extractLinks(path)).toEqual(objetos);
   });
 });
 describe('validate Links', () => {
+  it('hace la consulta http con fecth y retorna un promesas', () => {
+    const path = './miReadme.md';
+    const arrObj3 = func.validateLinks([
+      {
+        href: 'https://jestjs.io/docs/es-ES/getting-stated',
+        text: 'Empezando con Jest - Documentación oficial',
+        file: path,
+      },
+      {
+        href: 'https://jestjs.io/docs/es-ES/asynchronous',
+        text: 'Tests de código asincrónico con Jest - Documentación oficial',
+        file: path,
+      },
+    ]);
+    const arrayPromise = [
+      {
+        href: 'https://jestjs.io/docs/es-ES/getting-stated',
+        text: 'Empezando con Jest - Documentación oficial',
+        file: path,
+        status: 404,
+        statusText: 'Not Found',
+        message: 'fail',
+      },
+      {
+        href: 'https://jestjs.io/docs/es-ES/asynchronous',
+        text: 'Tests de código asincrónico con Jest - Documentación oficial',
+        file: path,
+        status: 200,
+        statusText: 'OK',
+        message: 'ok',
+      },
+    ];
+    return arrObj3.then((resultado) => {
+      expect(resultado).toEqual(arrayPromise);
+    });
+  });
+  it.only('si la peticion falla mostrará un error', () => {
+    const path = './miReadme.md';
+    fetch.mockRejectedValue(new Error('error message'));
+    const objLinksMock = {
+      href: 'https://jestjs.io/docs/es-ES/getting-stated',
+      text: 'Empezando con Jest - Documentación oficial',
+      file: path,
+    };
 
+    return func.validateLinks([objLinksMock]).then((res) => {
+      expect(res[0]).toEqual(expect.objectContaining({
+        status: 404,
+        statusText: 'Not Found',
+        message: 'fail',
+      }));
+    });
+  });
 });
+// describe('stats Links', () => {
+//   it('Objetos con links totales y unicos', () => {
+//     const objetos = [
+//       {
+//         href: 'https://jestjs.io/docs/es-ES/getting-stated',
+//         text: 'Empezando con Jest - Documentación oficial',
+//         file: './miReadme.md',
+//       },
+//       {
+//         href: 'https://jestjs.io/docs/es-ES/asynchronous',
+//         text: 'Tests de código asincrónico con Jest - Documentación oficial',
+//         file: './miReadme.md',
+//       },
+//     ];
+//     expect(func.statsLinks(objetos)).toEqual({ totalLinks: 2, uniqueLinks: 2});
+//   });
+// })

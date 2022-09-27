@@ -3,7 +3,6 @@ const func = require('./funciones.js');
 // const paths = 'D:\\Laboratoria\\LIM018-md-links\\miReadme.md';
 const mdLinks = (path, options) => {
   return new Promise((resolve, reject) => {
-    let links = [];
     if (!func.pathExists(path)) {
       reject(new Error('La ruta ingresada no existe, ingrese una ruta valida !!'));
     }
@@ -11,19 +10,13 @@ const mdLinks = (path, options) => {
     if (!func.isMd(absolute)) {
       reject(new Error('¡No hay archivos con extencion .md!'));
     }
-    const arrayObjetos = func.extractLinks(absolute);
-    // if (arrayObjetos === null) {
-    //   reject(new Error('El archivo no contiene'));
-    // }
     if (!options.validate) {
-      links = arrayObjetos;
-      resolve(links);
+      resolve(func.extractLinks(absolute));
     }
-    links = func.validateLinks(arrayObjetos);
-    resolve(links);
+    resolve(func.validateLinks(absolute));
   });
 };
-// mdLinks(paths, { validate: false })
+// mdLinks('./miReadme.md', { validate: true })
 //   .then((result) => {
 //     console.log(result);
 //   });

@@ -56,11 +56,11 @@ const extractLinks = (pathAbsolute) => {
   });
   return arrayObjetosLinks;
 };
-// const r = extractLinks(getAbsolutePath('./prueba2.md'));
+// const r = extractLinks(getAbsolutePath('./miReadme.md'));
 // console.log(r);
 
-const validateLinks = (arrayObjetos) => {
-  // const arrayObjects = extractLinks(paths);
+const validateLinks = (paths) => {
+  const arrayObjetos = extractLinks(paths);
   const arrayPromesas = arrayObjetos.map((objLink) => {
     return fetch(objLink.href)
       .then((res) => {
@@ -82,11 +82,12 @@ const validateLinks = (arrayObjetos) => {
   });
   return Promise.all(arrayPromesas);
 };
-// const va = validateLinks(r).then((result) => {
-//   return result;
-// });
-
-const statsLinks = (arrObjLinks) => {
+// validateLinks('./miReadme.md')
+//   .then((r) => {
+//      console.log(r);
+//   });
+const statsLinks = (paths) => {
+  const arrObjLinks = validateLinks(paths);
   return arrObjLinks.then((objLink) => {
     const arrayLinks = objLink.map((link) => {
       return link.href;
@@ -101,21 +102,21 @@ const statsLinks = (arrObjLinks) => {
     return { totalLinks, uniqueLinks: uniqueLinks.length };
   });
 };
-// statsLinks(va)
-//   .then((re) => {
-//     console.log(re);
-//   });
+// statsLinks('./miReadme.md').then((r) => {
+//   console.log(r);
+// });
 
-const brokenLinks = (arrObjLinks) => {
+const brokenLinks = (paths) => {
+  const arrObjLinks = validateLinks(paths);
   return arrObjLinks.then((objLink) => {
     return objLink.filter((link) => {
       return link.message === 'fail';
     }).length;
   });
 };
-// brokenLinks(va)
-//   .then((e) => {
-//     console.log(e);
+// brokenLinks('./miReadme.md')
+//   .then((r) => {
+//     console.log(r);
 //   });
 
 module.exports = {
