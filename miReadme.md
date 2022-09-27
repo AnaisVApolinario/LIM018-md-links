@@ -7,4 +7,3 @@ tanto usando librerías como implementando en VanillaJS.
 
 [Empezando con Jest - Documentación oficial](https://jestjs.io/docs/es-ES/getting-stated),
 [Tests de código asincrónico con Jest - Documentación oficial](https://jestjs.io/docs/es-ES/asynchronous),
-[Empezando con Jest - Documentación oficial](https://jestjs.io/docs/es-ES/getting-stated),
