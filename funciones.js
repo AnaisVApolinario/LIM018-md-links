@@ -2,17 +2,8 @@
 const fetch = require('node-fetch');
 const path = require('path');
 const fs = require('fs');
-// // Lee el contenido del directorio
-// const readDir = (paths) => fs.readdirSync(paths);
-
-// // VERIFICAR SI ES UN DIRECTORIO
-// const isDirectory = (paths) => fs.lstatSync(paths).isDirectory();
-
-// // VERIFICAR SI ES UN ARCHIVO
-// const isFile = (paths) => fs.lstatSync(paths).isFile();
-
-// COMPROBAR SI EL ARCHIVO EXISTE
-const pathExists = (paths) => fs.existsSync(paths);
+// VERIFICAR SI ES UN DIRECTORIO
+const isDirectory = (paths) => fs.lstatSync(paths).isDirectory();
 
 // COMPROBAR SI EL ARCHIVO ES MD
 const isMd = (paths) => {
@@ -24,14 +15,31 @@ const isMd = (paths) => {
   return false;
 };
 
-// console.log(isMd(path, {validate: false, stats: true}));
+const fileOrDirectory = (paths) => {
+  if (!isDirectory(paths)) {
+    return paths;
+  }
+  // leer el directorio
+  const readDir = fs.readdirSync(paths);
+  const arrPaths = readDir.map((element) => {
+    const pathsAbsolute = path.join(paths, element);
+    return isDirectory(pathsAbsolute) ? fileOrDirectory(pathsAbsolute) : pathsAbsolute;
+  });
+  const cleanFiles = arrPaths.flat().filter((file) => {
+    return isMd(file) === true;
+  });
+  return cleanFiles;
+};
+console.log(fileOrDirectory('pruebas/carp_prueba2'));
+
+// COMPROBAR SI EL ARCHIVO EXISTE
+const pathExists = (paths) => fs.existsSync(paths);
 
 // VER SI LA RUTA ES ABSOLUTA O CONVERTIR LA RUTA RELATIVA EN ABSOLUTA
 const getAbsolutePath = (paths) => {
   return path.isAbsolute(paths) ? paths : path.resolve(paths);
 };
 
-// console.log(readFile(getAbsolutePath(pathis)));
 const extractLinks = (pathAbsolute) => {
   const textHttps = /\[(.+)\]\((https?:\/\/.+)\)/gi;
   const readFileAbsolutePath = fs.readFileSync(pathAbsolute, 'utf-8');
@@ -82,9 +90,9 @@ const validateLinks = (paths) => {
   });
   return Promise.all(arrayPromesas);
 };
-// validateLinks('./miReadme.md')
+// validateLinks('./miRead.md')
 //   .then((r) => {
-//      console.log(r);
+//     console.log(r);
 //   });
 const statsLinks = (paths) => {
   const arrObjLinks = validateLinks(paths);
@@ -123,6 +131,7 @@ module.exports = {
   pathExists,
   getAbsolutePath,
   isMd,
+  fileOrDirectory,
   extractLinks,
   validateLinks,
   statsLinks,

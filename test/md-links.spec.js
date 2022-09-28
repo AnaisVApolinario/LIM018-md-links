@@ -48,7 +48,7 @@ describe('extract Links', () => {
   });
 
   it('archivo con links, extraer los link', () => {
-    const path = './miReadme.md';
+    const path = 'pruebas/carp_prueba2/oneBreak.md';
     const objetos = [
       {
         href: 'https://jestjs.io/docs/es-ES/getting-stated',
@@ -65,17 +65,17 @@ describe('extract Links', () => {
   });
 });
 describe('validate Links', () => {
-  it.only('hace la consulta http con fecth y retorna un promesas', (done) => {
+  it('hace la consulta http con fecth y retorna un promesas', (done) => {
     const path = './miReadme.md';
     const arrPromesas = func.validateLinks(path);
     const arr = [
       {
-        href: 'https://jestjs.io/docs/es-ES/getting-stated',
+        href: 'https://jestjs.io/docs/es-ES/getting-started',
         text: 'Empezando con Jest - Documentación oficial',
         file: path,
-        status: 404,
-        statusText: 'Not Found',
-        message: 'fail',
+        status: 200,
+        statusText: 'OK',
+        message: 'ok',
       },
       {
         href: 'https://jestjs.io/docs/es-ES/asynchronous',
@@ -86,14 +86,14 @@ describe('validate Links', () => {
         message: 'ok',
       },
     ];
-    Promise.all(arrPromesas)
+    arrPromesas
       .then((result) => {
         expect(result).toStrictEqual(arr);
         done();
       });
-    // return arrPromesas.then((resultado) => {
-    //   expect(resultado).toEqual(arr);
-    // });
+  });
+  it('hace la consulta http con fetch y bota un error', () => {
+
   });
 });
 // describe('stats Links', () => {
