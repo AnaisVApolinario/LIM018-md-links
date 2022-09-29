@@ -49,31 +49,15 @@ const readFile = (pathsMd) => {
 // console.log(readFile('./miReadme.md'));
 
 const extractLinks = (fileRead, pathMd) => {
-  const arrayTextHtpps = [];
-  if (!Array.isArray(pathMd)) {
-    const textHttps = /\[(.+)\]\((https?:\/\/.+)\)/gi;
-    const matchs = fileRead.match(textHttps);
-    console.log(matchs);
-    if (matchs === null) {
-      return 'no hay concidencias';
-    }
-  }
-  fileRead.forEach((f) => {
-    const textHttps = /\[(.+)\]\((https?:\/\/.+)\)/gi;
-    const matchs = f.match(textHttps);
-    console.log(matchs);
-    if (matchs === null) {
-      return 'no hay concidencias';
-    }
-    return arrayTextHtpps.push(matchs);
-  });
+  const textHttps = /\[(.+)\]\((https?:\/\/.+)\)/gi;
+  const arrayTextHtpps = fileRead.match(textHttps);
   if (fileRead === '') {
     return [];
   }
   if (arrayTextHtpps === null) {
     return [];
   }
-  const arrayObjetosLinks = arrayTextHtpps.flat().map((links) => {
+  const arrayObjetosLinks = arrayTextHtpps.map((links) => {
     const textLink = /\[[^\s]+(.+?)\]/gi;
     const matchText = links.match(textLink);
     const httpsLink = /\((https?.+?)\)/gi;
@@ -87,7 +71,13 @@ const extractLinks = (fileRead, pathMd) => {
   });
   return arrayObjetosLinks;
 };
-const r = extractLinks(readFile('pruebas/carp_prueba2'), getAbsolutePath('pruebas/carp_prueba2'));
+// let arr = [];
+// readFile(p).forEach((el) => {
+//   const o = extractLinks(el, getAbsolutePath('pruebas/carp_prueba2'));
+//   arr.push(o);
+// });
+// console.log(arr.flat()); // array de objetos con 3 links;
+// const r = extractLinks(readFile(p), getAbsolutePath('pruebas/carp_prueba2'));
 // console.log(r);
 const validateLinks = (linksExtract) => {
   const arrayPromesas = linksExtract.map((objLink) => {

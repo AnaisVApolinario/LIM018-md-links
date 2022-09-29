@@ -24,11 +24,19 @@ arrSinValSt.forEach((path) => {
       }).catch(() => {
         console.log(chalk.red.italic('Ingrese una ruta valida, por favor!!'));
       });
-  } else if (stats && !validate) {
-    statsLinks(path)
-      .then((objt) => {
-        console.log(chalk.blue.italic('Links Totales: ', chalk.green(objt.totalLinks)));
-        console.log(chalk.blue.italic('Links Unicos: ', chalk.green(objt.uniqueLinks)));
+  }
+
+  if (stats && !validate) {
+    mdLinks(path, { validate })
+      .then((result) => {
+        console.log('Links Totales: ', chalk.green(statsLinks(result.totalLinks)));
+        console.log('Links Unicos: ', chalk.green(statsLinks(result.uniqueLinks)));
+
+        // .then((objt) => {
+        //   console.log('soy obj', obj);
+        //   console.log(chalk.blue.italic('Links Totales: ', chalk.green(objt.totalLinks)));
+        //   console.log(chalk.blue.italic('Links Unicos: ', chalk.green(objt.uniqueLinks)));
+        // });
       });
   }
   if (stats && validate) {

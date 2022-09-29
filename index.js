@@ -17,21 +17,28 @@ const mdLinks = (path, options) => {
         resolve(func.validateLinks(extract));
       }
     }
-    console.log('soy directorio');
-    // const rutaAbsoluta = func.getAbsolutePath(path);
-    const arrRutas = func.readDir(path);
-    const arrRutasMd = func.fileOrDirectory(arrRutas, path);
-    const extract = func.readFile(arrRutasMd);
+    const rutaAbsoluta = func.getAbsolutePath(path);
+    const arrRutas = func.readDir(rutaAbsoluta);
+    const arrRutasMd = func.fileOrDirectory(arrRutas, rutaAbsoluta);
+    const arrMultidime = [];
+    arrRutasMd.forEach((md) => {
+      const leer = func.readFile(md);
+      const extract = func.extractLinks(leer, md);
+      arrMultidime.push(extract);
+    });
+    const arrUnido = arrMultidime.flat();
     if (!options.validate) {
-      resolve(extract);
+      resolve(arrUnido);
     }
-    resolve(func.validateLinks(extract));
+    resolve(func.validateLinks(arrUnido));
   });
 };
-mdLinks('./miReadme.md', { validate: true })
-  .then((result) => {
-    console.log('hola', result);
-  });
+// mdLinks('pruebas/carp_prueba2', { validate: true })
+//   .then((result) => {
+//     console.log('hola', result);
+//   }).catch(() => {
+//     console.log('La ruta o directorio no existe, ingrese ruta o directorio valido!!');
+//   });
 module.exports = mdLinks;
 // if (!func.pathExists(path)) {
 //   reject(new Error('La ruta ingresada no existe, ingrese una ruta valida !!'));
