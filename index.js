@@ -33,12 +33,13 @@ const mdLinks = (path, options) => {
     resolve(func.validateLinks(arrUnido));
   });
 };
-// mdLinks('pruebas/carp_prueba2', { validate: true })
-//   .then((result) => {
-//     console.log('hola', result);
-//   }).catch(() => {
-//     console.log('La ruta o directorio no existe, ingrese ruta o directorio valido!!');
-//   });
+mdLinks('pruebas', { validate: true })
+  .then((result) => {
+    console.log('hola', result);
+  }).catch((error) => {
+    // console.log('La ruta o directorio no existe, ingrese ruta o directorio valido!!');
+    console.log(error);
+  });
 module.exports = mdLinks;
 // if (!func.pathExists(path)) {
 //   reject(new Error('La ruta ingresada no existe, ingrese una ruta valida !!'));

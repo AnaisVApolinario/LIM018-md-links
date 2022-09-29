@@ -24,19 +24,29 @@ const isMd = (pathAbsolute) => {
   return false;
 };
 
+// filtra los archivos a partir de un path
 const fileOrDirectory = (readDirectory, pathAbsolute) => {
-  // leer el directorio
-  const arrPaths = readDirectory.map((element) => {
+  // leer el
+  // console.log('direct-->', readDirectory);
+  const arrPaths = [];
+  readDirectory.forEach((element) => {
+    // console.log('element', element);
     const rutaAbsoluta = path.join(pathAbsolute, element);
-    return isDirectory(rutaAbsoluta) ? fileOrDirectory(rutaAbsoluta) : rutaAbsoluta;
+    if (!isDirectory(rutaAbsoluta)) {
+      arrPaths.push(rutaAbsoluta);
+    } else {
+      fileOrDirectory(readDir(rutaAbsoluta), rutaAbsoluta);
+    }
   });
-  const arrpathsMd = arrPaths.flat().filter((file) => {
+  // console.log('arr->', arrPaths);
+  const arrpathsMd = arrPaths.filter((file) => {
     return isMd(file) === true;
   });
   return arrpathsMd;
 };
 // eslint-disable-next-line max-len
-const p = fileOrDirectory(readDir('pruebas/carp_prueba2'), getAbsolutePath('pruebas/carp_prueba2'));
+const p = fileOrDirectory(readDir('pruebas'), getAbsolutePath('pruebas'));
+console.log(p)
 
 const readFile = (pathsMd) => {
   if (!Array.isArray(pathsMd)) {
