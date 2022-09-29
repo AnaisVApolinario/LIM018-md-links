@@ -5,20 +5,6 @@ const func = require('../funciones.js');
 // jest.mock('node-fecth.js'); // activamos el mock;
 jest.mock('node-fetch');
 
-describe('path exists', () => {
-  const path = './miReadme.md';
-  const path2 = './animalito.png';
-  it('pathExists is a function', () => {
-    expect(typeof func.pathExists).toBe('function');
-  });
-  it('the path exists', () => {
-    expect(func.pathExists(path)).toBeTruthy();
-  });
-  it('the path does not exist', () => {
-    expect(func.pathExists(path2)).toBeFalsy();
-  });
-});
-
 describe('path with extension md ', () => {
   const path = './miReadme.md';
   const path2 = './perro.png';

@@ -2,36 +2,6 @@
 const fetch = require('node-fetch');
 const path = require('path');
 const fs = require('fs');
-// VERIFICAR SI ES UN DIRECTORIO
-const isDirectory = (paths) => fs.lstatSync(paths).isDirectory();
-
-// COMPROBAR SI EL ARCHIVO ES MD
-const isMd = (paths) => {
-  // verificar si es md
-  const pathMd = path.extname(paths);
-  if (pathMd === '.md') {
-    return true;
-  }
-  return false;
-};
-
-const fileOrDirectory = (paths) => {
-  if (!isDirectory(paths)) {
-    return paths;
-  }
-  // leer el directorio
-  const readDir = fs.readdirSync(paths);
-  const arrPaths = readDir.map((element) => {
-    const pathsAbsolute = path.join(paths, element);
-    return isDirectory(pathsAbsolute) ? fileOrDirectory(pathsAbsolute) : pathsAbsolute;
-  });
-  const cleanFiles = arrPaths.flat().filter((file) => {
-    return isMd(file) === true;
-  });
-  return cleanFiles;
-};
-console.log(fileOrDirectory('pruebas/carp_prueba2'));
-
 // COMPROBAR SI EL ARCHIVO EXISTE
 const pathExists = (paths) => fs.existsSync(paths);
 
@@ -39,18 +9,71 @@ const pathExists = (paths) => fs.existsSync(paths);
 const getAbsolutePath = (paths) => {
   return path.isAbsolute(paths) ? paths : path.resolve(paths);
 };
+// VERIFICAR SI ES UN DIRECTORIO
+const isDirectory = (pathAbsolute) => fs.lstatSync(pathAbsolute).isDirectory();
 
-const extractLinks = (pathAbsolute) => {
-  const textHttps = /\[(.+)\]\((https?:\/\/.+)\)/gi;
-  const readFileAbsolutePath = fs.readFileSync(pathAbsolute, 'utf-8');
-  const arrayTextHtpps = readFileAbsolutePath.match(textHttps);
-  if (readFileAbsolutePath === '') {
+// LEER DIRECTORIO
+const readDir = (pathAbsolute) => fs.readdirSync(pathAbsolute);
+
+// COMPROBAR SI EL ARCHIVO ES MD
+const isMd = (pathAbsolute) => {
+  const pathMd = path.extname(pathAbsolute);
+  if (pathMd === '.md') {
+    return true;
+  }
+  return false;
+};
+
+const fileOrDirectory = (readDirectory, pathAbsolute) => {
+  // leer el directorio
+  const arrPaths = readDirectory.map((element) => {
+    const rutaAbsoluta = path.join(pathAbsolute, element);
+    return isDirectory(rutaAbsoluta) ? fileOrDirectory(rutaAbsoluta) : rutaAbsoluta;
+  });
+  const arrpathsMd = arrPaths.flat().filter((file) => {
+    return isMd(file) === true;
+  });
+  return arrpathsMd;
+};
+// eslint-disable-next-line max-len
+const p = fileOrDirectory(readDir('pruebas/carp_prueba2'), getAbsolutePath('pruebas/carp_prueba2'));
+
+const readFile = (pathsMd) => {
+  if (!Array.isArray(pathsMd)) {
+    return fs.readFileSync(pathsMd, 'utf-8');
+  }
+  return pathsMd.map((paath) => {
+    return fs.readFileSync(paath, 'utf-8');
+  });
+};
+// console.log(readFile('./miReadme.md'));
+
+const extractLinks = (fileRead, pathMd) => {
+  const arrayTextHtpps = [];
+  if (!Array.isArray(pathMd)) {
+    const textHttps = /\[(.+)\]\((https?:\/\/.+)\)/gi;
+    const matchs = fileRead.match(textHttps);
+    console.log(matchs);
+    if (matchs === null) {
+      return 'no hay concidencias';
+    }
+  }
+  fileRead.forEach((f) => {
+    const textHttps = /\[(.+)\]\((https?:\/\/.+)\)/gi;
+    const matchs = f.match(textHttps);
+    console.log(matchs);
+    if (matchs === null) {
+      return 'no hay concidencias';
+    }
+    return arrayTextHtpps.push(matchs);
+  });
+  if (fileRead === '') {
     return [];
   }
   if (arrayTextHtpps === null) {
     return [];
   }
-  const arrayObjetosLinks = arrayTextHtpps.map((links) => {
+  const arrayObjetosLinks = arrayTextHtpps.flat().map((links) => {
     const textLink = /\[[^\s]+(.+?)\]/gi;
     const matchText = links.match(textLink);
     const httpsLink = /\((https?.+?)\)/gi;
@@ -58,18 +81,16 @@ const extractLinks = (pathAbsolute) => {
     const objLinks = {
       href: matchHttp[0].slice(1, -1),
       text: matchText[0].slice(1, -1),
-      file: pathAbsolute,
+      file: pathMd,
     };
     return objLinks;
   });
   return arrayObjetosLinks;
 };
-// const r = extractLinks(getAbsolutePath('./miReadme.md'));
+const r = extractLinks(readFile('pruebas/carp_prueba2'), getAbsolutePath('pruebas/carp_prueba2'));
 // console.log(r);
-
-const validateLinks = (paths) => {
-  const arrayObjetos = extractLinks(paths);
-  const arrayPromesas = arrayObjetos.map((objLink) => {
+const validateLinks = (linksExtract) => {
+  const arrayPromesas = linksExtract.map((objLink) => {
     return fetch(objLink.href)
       .then((res) => {
         if (res.status >= 200 && res.status < 400) {
@@ -90,47 +111,45 @@ const validateLinks = (paths) => {
   });
   return Promise.all(arrayPromesas);
 };
-// validateLinks('./miRead.md')
-//   .then((r) => {
-//     console.log(r);
+// const pi = validateLinks(r)
+//   .then((res) => {
+//     return res;
 //   });
-const statsLinks = (paths) => {
-  const arrObjLinks = validateLinks(paths);
-  return arrObjLinks.then((objLink) => {
-    const arrayLinks = objLink.map((link) => {
-      return link.href;
-    });
-    const totalLinks = arrayLinks.length;
-    const uniqueLinks = [];
-    arrayLinks.forEach((link) => {
-      if (!uniqueLinks.includes(link)) {
-        uniqueLinks.push(link);
-      }
-    });
-    return { totalLinks, uniqueLinks: uniqueLinks.length };
-  });
-};
-// statsLinks('./miReadme.md').then((r) => {
-//   console.log(r);
-// });
 
-const brokenLinks = (paths) => {
-  const arrObjLinks = validateLinks(paths);
-  return arrObjLinks.then((objLink) => {
+const statsLinks = (linksExtract) => {
+  const arrayLinks = linksExtract.map((link) => {
+    return link.href;
+  });
+  const totalLinks = arrayLinks.length;
+  const uniqueLinks = [];
+  arrayLinks.forEach((link) => {
+    if (!uniqueLinks.includes(link)) {
+      uniqueLinks.push(link);
+    }
+  });
+  return { totalLinks, uniqueLinks: uniqueLinks.length };
+};
+// console.log(statsLinks(r));
+
+const brokenLinks = (linksValidate) => {
+  return linksValidate.then((objLink) => {
     return objLink.filter((link) => {
       return link.message === 'fail';
     }).length;
   });
 };
-// brokenLinks('./miReadme.md')
-//   .then((r) => {
-//     console.log(r);
+// brokenLinks(pi)
+//   .then((er) => {
+//     console.log(er);
 //   });
 
 module.exports = {
   pathExists,
   getAbsolutePath,
+  isDirectory,
+  readDir,
   isMd,
+  readFile,
   fileOrDirectory,
   extractLinks,
   validateLinks,
