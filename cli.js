@@ -29,25 +29,26 @@ arrSinValSt.forEach((path) => {
   if (stats && !validate) {
     mdLinks(path, { validate })
       .then((result) => {
-        console.log('Links Totales: ', chalk.green(statsLinks(result.totalLinks)));
-        console.log('Links Unicos: ', chalk.green(statsLinks(result.uniqueLinks)));
-
-        // .then((objt) => {
-        //   console.log('soy obj', obj);
-        //   console.log(chalk.blue.italic('Links Totales: ', chalk.green(objt.totalLinks)));
-        //   console.log(chalk.blue.italic('Links Unicos: ', chalk.green(objt.uniqueLinks)));
-        // });
+        console.log(statsLinks(result));
+        // console.log('Links Totales: ', chalk.green(statsLinks(result.totalLinks)));
+        // console.log('Links Unicos: ', chalk.green(statsLinks(result.uniqueLinks)));
       });
   }
   if (stats && validate) {
-    statsLinks(path)
-      .then((obj) => {
-        console.log(chalk.blue.italic('Links Totales: ', chalk.green(obj.totalLinks)));
-        console.log(chalk.blue.italic('Links Unicos: ', chalk.green(obj.uniqueLinks)));
-      });
-    brokenLinks(path)
+    mdLinks(path, { validate })
       .then((result) => {
-        console.log(chalk.red.italic('Links Rotos: ', chalk.red(result)));
+        console.log(statsLinks(result));
+        console.log('Links Rotos: ', brokenLinks(result));
       });
   }
 });
+
+// statsLinks(path)
+// .then((obj) => {
+//   console.log(chalk.blue.italic('Links Totales: ', chalk.green(obj.totalLinks)));
+//   console.log(chalk.blue.italic('Links Unicos: ', chalk.green(obj.uniqueLinks)));
+// });
+// brokenLinks(path)
+// .then((result) => {
+//   console.log(chalk.red.italic('Links Rotos: ', chalk.red(result)));
+// });

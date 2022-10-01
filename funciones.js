@@ -25,28 +25,27 @@ const isMd = (pathAbsolute) => {
 };
 
 // filtra los archivos a partir de un path
-const fileOrDirectory = (readDirectory, pathAbsolute) => {
-  // leer el
-  // console.log('direct-->', readDirectory);
-  const arrPaths = [];
-  readDirectory.forEach((element) => {
-    // console.log('element', element);
-    const rutaAbsoluta = path.join(pathAbsolute, element);
-    if (!isDirectory(rutaAbsoluta)) {
-      arrPaths.push(rutaAbsoluta);
+const fileOrDirectory = (pathContent, pathDir, result) => {
+  for (let i = 0; i < pathContent.length; i++) {
+    const absolutePath = path.join(pathDir, pathContent[i]);
+
+    if (!isDirectory(absolutePath)) {
+      result.push(absolutePath);
     } else {
-      fileOrDirectory(readDir(rutaAbsoluta), rutaAbsoluta);
+      fileOrDirectory(readDir(absolutePath), absolutePath, result);
     }
-  });
-  // console.log('arr->', arrPaths);
-  const arrpathsMd = arrPaths.filter((file) => {
-    return isMd(file) === true;
-  });
-  return arrpathsMd;
+  }
+  return result;
 };
 // eslint-disable-next-line max-len
-const p = fileOrDirectory(readDir('pruebas'), getAbsolutePath('pruebas'));
-console.log(p)
+// const p = fileOrDirectory(readDir('pruebas'), getAbsolutePath('pruebas'), []);
+// console.log(p);
+const filtrarRutasMd = (rutas) => {
+  return rutas.filter((ruta) => {
+    return isMd(ruta) === true;
+  });
+};
+// console.log(filtrarRutasMd(p));
 
 const readFile = (pathsMd) => {
   if (!Array.isArray(pathsMd)) {
@@ -132,11 +131,9 @@ const statsLinks = (linksExtract) => {
 // console.log(statsLinks(r));
 
 const brokenLinks = (linksValidate) => {
-  return linksValidate.then((objLink) => {
-    return objLink.filter((link) => {
-      return link.message === 'fail';
-    }).length;
-  });
+  return linksValidate.filter((link) => {
+    return link.message === 'fail';
+  }).length;
 };
 // brokenLinks(pi)
 //   .then((er) => {
@@ -149,6 +146,7 @@ module.exports = {
   isDirectory,
   readDir,
   isMd,
+  filtrarRutasMd,
   readFile,
   fileOrDirectory,
   extractLinks,

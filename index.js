@@ -8,20 +8,22 @@ const mdLinks = (path, options) => {
         reject(new Error('La ruta ingresada no existe, ingrese una ruta valida !!'));
       }
       const absolute = func.getAbsolutePath(path);
-      if (func.isMd(absolute)) {
-        const fileRead = func.readFile(path);
-        const extract = func.extractLinks(fileRead, absolute);
-        if (!options.validate) {
-          resolve(extract);
-        }
-        resolve(func.validateLinks(extract));
+      if (!func.isMd(absolute)) {
+        reject(new Error('¡No hay archivos con extencion .md!'));
       }
+      const fileRead = func.readFile(absolute);
+      const extract = func.extractLinks(fileRead, absolute);
+      if (!options.validate) {
+        resolve(extract);
+      }
+      resolve(func.validateLinks(extract));
     }
     const rutaAbsoluta = func.getAbsolutePath(path);
-    const arrRutas = func.readDir(rutaAbsoluta);
-    const arrRutasMd = func.fileOrDirectory(arrRutas, rutaAbsoluta);
+    const pathsDir = func.readDir(rutaAbsoluta);
+    const pathDir = func.fileOrDirectory(pathsDir, rutaAbsoluta, []);
+    const rutasMd = func.filtrarRutasMd(pathDir);
     const arrMultidime = [];
-    arrRutasMd.forEach((md) => {
+    rutasMd.forEach((md) => {
       const leer = func.readFile(md);
       const extract = func.extractLinks(leer, md);
       arrMultidime.push(extract);
@@ -33,13 +35,12 @@ const mdLinks = (path, options) => {
     resolve(func.validateLinks(arrUnido));
   });
 };
-mdLinks('pruebas', { validate: true })
-  .then((result) => {
-    console.log('hola', result);
-  }).catch((error) => {
-    // console.log('La ruta o directorio no existe, ingrese ruta o directorio valido!!');
-    console.log(error);
-  });
+// mdLinks('test', { validate: false })
+//   .then((result) => {
+//     console.log(result);
+//   }).catch(() => {
+//     console.log('La ruta o directorio no existe, ingrese ruta o directorio valido!!');
+//   });
 module.exports = mdLinks;
 // if (!func.pathExists(path)) {
 //   reject(new Error('La ruta ingresada no existe, ingrese una ruta valida !!'));
