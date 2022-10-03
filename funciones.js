@@ -24,7 +24,7 @@ const isMd = (pathAbsolute) => {
   return false;
 };
 
-// filtra los archivos a partir de un path
+// FILTRAR LOS ARCHIVOS A PARTIR DE UN ARRAY DE ARCHIVOS
 const fileOrDirectory = (pathContent, pathDir, result) => {
   for (let i = 0; i < pathContent.length; i++) {
     const absolutePath = path.join(pathDir, pathContent[i]);
@@ -37,16 +37,15 @@ const fileOrDirectory = (pathContent, pathDir, result) => {
   }
   return result;
 };
-// eslint-disable-next-line max-len
-// const p = fileOrDirectory(readDir('pruebas'), getAbsolutePath('pruebas'), []);
-// console.log(p);
+
+// FILTRAR ARCHIVOS MD
 const filtrarRutasMd = (rutas) => {
   return rutas.filter((ruta) => {
     return isMd(ruta) === true;
   });
 };
-// console.log(filtrarRutasMd(p));
 
+// LEER ARCHIVOS
 const readFile = (pathsMd) => {
   if (!Array.isArray(pathsMd)) {
     return fs.readFileSync(pathsMd, 'utf-8');
@@ -55,8 +54,8 @@ const readFile = (pathsMd) => {
     return fs.readFileSync(paath, 'utf-8');
   });
 };
-// console.log(readFile('./miReadme.md'));
 
+// EXTRAER LINKS DE LOS ARCHIVOS
 const extractLinks = (fileRead, pathMd) => {
   const textHttps = /\[(.+)\]\((https?:\/\/.+)\)/gi;
   const arrayTextHtpps = fileRead.match(textHttps);
@@ -80,14 +79,8 @@ const extractLinks = (fileRead, pathMd) => {
   });
   return arrayObjetosLinks;
 };
-// let arr = [];
-// readFile(p).forEach((el) => {
-//   const o = extractLinks(el, getAbsolutePath('pruebas/carp_prueba2'));
-//   arr.push(o);
-// });
-// console.log(arr.flat()); // array de objetos con 3 links;
-// const r = extractLinks(readFile(p), getAbsolutePath('pruebas/carp_prueba2'));
-// console.log(r);
+
+// VALIDAR LINKS DE LOS ARCHIVOS
 const validateLinks = (linksExtract) => {
   const arrayPromesas = linksExtract.map((objLink) => {
     return fetch(objLink.href)
@@ -110,11 +103,8 @@ const validateLinks = (linksExtract) => {
   });
   return Promise.all(arrayPromesas);
 };
-// const pi = validateLinks(r)
-//   .then((res) => {
-//     return res;
-//   });
 
+// VER CUANTOS LINKS HAY Y CUANTOS SON UNICOS.
 const statsLinks = (linksExtract) => {
   const arrayLinks = linksExtract.map((link) => {
     return link.href;
@@ -128,17 +118,13 @@ const statsLinks = (linksExtract) => {
   });
   return { totalLinks, uniqueLinks: uniqueLinks.length };
 };
-// console.log(statsLinks(r));
 
+// VER CUANTOS LINKS ESTAN ROTOS
 const brokenLinks = (linksValidate) => {
   return linksValidate.filter((link) => {
     return link.message === 'fail';
   }).length;
 };
-// brokenLinks(pi)
-//   .then((er) => {
-//     console.log(er);
-//   });
 
 module.exports = {
   pathExists,
