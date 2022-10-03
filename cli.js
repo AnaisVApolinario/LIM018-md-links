@@ -30,14 +30,15 @@ arrSinValSt.forEach((path) => {
     mdLinks(path, { validate })
       .then((result) => {
         console.log(statsLinks(result));
-        // console.log('Links Totales: ', chalk.green(statsLinks(result.totalLinks)));
-        // console.log('Links Unicos: ', chalk.green(statsLinks(result.uniqueLinks)));
+        console.log('Total de Links: ', chalk.green(statsLinks(result).totalLinks));
+        console.log('Links Unicos: ', chalk.green(statsLinks(result).uniqueLinks));
       });
   }
   if (stats && validate) {
     mdLinks(path, { validate })
       .then((result) => {
-        console.log(statsLinks(result));
+        console.log('Total de Links:', statsLinks(result).totalLinks);
+        console.log('Links Unicos:', statsLinks(result).uniqueLinks);
         console.log('Links Rotos: ', brokenLinks(result));
       });
   }
