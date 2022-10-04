@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 // const fetch = require('node-fetch');
 const func = require('../funciones.js');
+const mdLinks = require('../index.js');
 
 // jest.mock('node-fecth.js'); // activamos el mock;
 jest.mock('node-fetch');
@@ -143,7 +144,6 @@ describe('Archivos en directorios', () => {
   it('extraer archivos de todas las carpetas', () => {
     // const files = ['carp_prueba1', 'carp_prueba2', 'repeat.md'];
     const arrFile = func.readDir('pruebas');
-    console.log(func.fileOrDirectory(arrFile, 'pruebas', []));
     expect(func.fileOrDirectory(arrFile, 'pruebas', [])).toEqual([
       'pruebas\\carp_prueba1\\break.md',
       'pruebas\\carp_prueba1\\prueba1.md',
@@ -169,5 +169,28 @@ describe('Archivos en directorios', () => {
       'pruebas\\carp_prueba2\\prueba2.md',
       'pruebas\\repeat.md',
     ]);
+  });
+});
+
+describe('Md Links', () => {
+  it('imprimir en consola el link sin validar', () => {
+    const path = 'pruebas/carp_prueba2/listo.md';
+    const mdlinks = mdLinks(path, { validate: false });
+    const sinValidate = [
+      {
+        href: 'https://jestjs.io/docs/es-ES/getting-started',
+        text: 'Empezando con Jest - Documentación oficial',
+        file: 'D:\\Laboratoria\\LIM018-md-links\\pruebas\\carp_prueba2\\listo.md',
+      },
+      {
+        href: 'https://jestjs.io/docs/es-ES/asynchronous',
+        text: 'Tests de código asincrónico con Jest - Documentación oficial',
+        file: 'D:\\Laboratoria\\LIM018-md-links\\pruebas\\carp_prueba2\\listo.md',
+      },
+    ];
+    mdlinks
+      .then((result) => {
+        expect(result).toEqual(sinValidate);
+      });
   });
 });
