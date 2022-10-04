@@ -34,10 +34,4 @@ const mdLinks = (path, options) => {
     resolve(func.validateLinks(arrUnido));
   });
 };
-// mdLinks('test', { validate: false })
-//   .then((result) => {
-//     console.log(result);
-//   }).catch(() => {
-//     console.log('La ruta o directorio no existe, ingrese ruta o directorio valido!!');
-//   });
 module.exports = mdLinks;
