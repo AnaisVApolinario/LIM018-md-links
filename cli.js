@@ -17,28 +17,51 @@ const validate = argv.includes('--validate');
 const stats = argv.includes('--stats');
 const help = argv.includes('--help');
 if (arrSinValSt.length === 0) {
-  console.log('Porfavor ingrese la ruta o archivo que desea analizar');
-  console.log('** Para mayor información escriba --help, para revisar las distintas opciones **');
+  console.log(chalk.cyan('Porfavor ingrese la ruta o archivo que desea analizar'));
+  console.log(chalk.italic.cyanBright(`** Para mayor información escriba ${chalk.italic.redBright.bold('--help')}, para revisar las distintas opciones **`));
 }
 
 if (help && !stats && !validate) {
   console.log(`
-  ⭕⭕⭕⭕⭕⭕⭕ OPCIONES ⭕⭕⭕⭕⭕⭕⭕
+  🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹    ${chalk.red('OPCIONES')}    🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹
 
-  💨 md-links ${chalk.green('<path>')} ${chalk.red('=>')} Path hace referencia al archivo o directorio que desees analizar.
-  💨 md-links <path> ${chalk.green('--validate')} ${chalk.red('=>')} Esta opción se hace la petición HTTP.
-  💨 md-links <path> ${chalk.green('--stats')} ${chalk.red('=>')} Esta opción obtendra las estadísticas de los links encontrados, como el total de links y los links unicos.
-  💨 md-links <path> ${chalk.green('--validate --stats')} o ${chalk.green('--stats --validate')} ${chalk.red('=>')} Esta opción obtendra las estadísticas de los links encontrados, como el total de links, los links unicos y links rotos.
-  💨 md-links ${chalk.green('--help')} ${chalk.red('=>')} Muestra informacion acerca de las distintas opciones.
+  🔸 ${chalk.cyan('md-links')} ${chalk.green.bold('<path>')} 💨 Path hace referencia al archivo o directorio que desees \n     analizar.'
 
-  ${chalk.cyan('🔅🔅🔅 by AnaisVA 🔅🔅🔅')}
+  🔸 ${chalk.cyan('md-links <path>')} ${chalk.green.bold('--validate')} 💨 Esta opción se hace la petición HTTP.
+
+  🔸 ${chalk.cyan('md-links <path>')} ${chalk.green.bold('--stats')} 💨 Esta opción obtendra las estadísticas de los links \n     encontrados, como  el total de links y los links unicos.
+
+  🔸 ${chalk.cyan('md-links <path>')} ${chalk.green.bold('--validate --stats')} o ${chalk.green.bold('--stats --validate')} 💨 Esta  opción \n     obtendra las estadísticas de los links encontrados, como el \n     total de links, los links unicos y links rotos.'
+
+  🔸 ${chalk.cyan('md-links')} ${chalk.green.bold('--help')} 💨 Muestra informacion acerca de las distintas opciones.'
+
+                            ${chalk.italic.magenta('🔅🔅🔅 by AnaisVA 🔅🔅🔅')}
   `);
 }
 arrSinValSt.forEach((path) => {
   if (!stats && !help) {
     mdLinks(path, { validate })
       .then((result) => {
-        console.log(result);
+        result.forEach((obj) => {
+          console.log(`
+          ${chalk.cyan('===============================')}
+                 ${chalk.cyan('LINKS ENCONTRADOS')}    
+          ${chalk.cyan('===============================')}       
+          `);
+          if (!validate) {
+            console.log(chalk.italic.yellow('Href:'), obj.href);
+            console.log(chalk.italic.yellow('Text:'), obj.text);
+            console.log(chalk.italic.yellow('File:'), obj.file);
+          } else {
+            console.log(chalk.italic.yellow('Href:'), obj.href);
+            console.log(chalk.italic.yellow('Text:'), obj.text);
+            console.log(chalk.italic.yellow('File:'), obj.file);
+            console.log(chalk.italic.yellow('Status:'), obj.status);
+            console.log(chalk.italic.yellow('Status Text:'), obj.statusText);
+            console.log(chalk.italic.yellow('Message:'), obj.message);
+          }
+        });
+        // console.log(result);
       }).catch(() => {
         console.log(chalk.red.italic('Ingrese una ruta o directorio valido, por favor!!'));
       });
@@ -47,27 +70,20 @@ arrSinValSt.forEach((path) => {
   if (stats && !validate) {
     mdLinks(path, { validate })
       .then((result) => {
-        console.log(statsLinks(result));
-        console.log('Total de Links: ', chalk.green(statsLinks(result).totalLinks));
-        console.log('Links Unicos: ', chalk.green(statsLinks(result).uniqueLinks));
+        console.log(chalk.italic.bold.cyan('   ESTADISTICA DE LOS LINKS   '));
+        console.log(chalk.yellow('============================='));
+        console.log('🔰', chalk.yellow(' Total de Links: '), chalk.greenBright(statsLinks(result).totalLinks));
+        console.log('🔰', chalk.yellow(' Links Unicos: '), chalk.greenBright(statsLinks(result).uniqueLinks));
       });
   }
   if (stats && validate) {
     mdLinks(path, { validate })
       .then((result) => {
-        console.log('Total de Links:', statsLinks(result).totalLinks);
-        console.log('Links Unicos:', statsLinks(result).uniqueLinks);
-        console.log('Links Rotos: ', brokenLinks(result));
+        console.log(chalk.italic.bold.cyan('   ESTADISTICA DE LOS LINKS COMPLETA  '));
+        console.log(chalk.yellow('======================================='));
+        console.log('🔰', chalk.yellow(' Total de Links: '), chalk.greenBright(statsLinks(result).totalLinks));
+        console.log('🔰', chalk.yellow(' Links Unicos: '), chalk.greenBright(statsLinks(result).uniqueLinks));
+        console.log('🔰', chalk.yellow(' Links Rotos: '), chalk.greenBright(brokenLinks(result)));
       });
   }
 });
-
-// statsLinks(path)
-// .then((obj) => {
-//   console.log(chalk.blue.italic('Links Totales: ', chalk.green(obj.totalLinks)));
-//   console.log(chalk.blue.italic('Links Unicos: ', chalk.green(obj.uniqueLinks)));
-// });
-// brokenLinks(path)
-// .then((result) => {
-//   console.log(chalk.red.italic('Links Rotos: ', chalk.red(result)));
-// });
