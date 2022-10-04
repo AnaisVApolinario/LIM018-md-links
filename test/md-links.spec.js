@@ -1,5 +1,6 @@
 /* eslint-disable no-undef */
 // const fetch = require('node-fetch');
+const { describe } = require('yargs');
 const func = require('../funciones.js');
 const mdLinks = require('../index.js');
 
@@ -192,5 +193,56 @@ describe('Md Links', () => {
       .then((result) => {
         expect(result).toEqual(sinValidate);
       });
+  });
+  it('imprimir en consola el link sin validar', () => {
+    const path = 'pruebas/carp_prueba2/listo.md';
+    const mdlinks = mdLinks(path, { validate: false });
+    const sinValidate = [
+      {
+        href: 'https://jestjs.io/docs/es-ES/getting-started',
+        text: 'Empezando con Jest - Documentación oficial',
+        file: 'D:\\Laboratoria\\LIM018-md-links\\pruebas\\carp_prueba2\\listo.md',
+      },
+      {
+        href: 'https://jestjs.io/docs/es-ES/asynchronous',
+        text: 'Tests de código asincrónico con Jest - Documentación oficial',
+        file: 'D:\\Laboratoria\\LIM018-md-links\\pruebas\\carp_prueba2\\listo.md',
+      },
+    ];
+    mdlinks
+      .then((result) => {
+        expect(result).toEqual(sinValidate);
+      });
+  });
+  it('imprimir en consola el link validado', () => {
+    const path = 'pruebas/carp_prueba2/listo.md';
+    const mdlinks = mdLinks(path, { validate: true });
+    const validate = [
+      {
+        href: 'https://jestjs.io/docs/es-ES/getting-started',
+        text: 'Empezando con Jest - Documentación oficial',
+        file: 'D:\\Laboratoria\\LIM018-md-links\\pruebas\\carp_prueba2\\listo.md',
+        status: 200,
+        statusText: 'OK',
+        message: 'ok',
+      },
+      {
+        href: 'https://jestjs.io/docs/es-ES/asynchronous',
+        text: 'Tests de código asincrónico con Jest - Documentación oficial',
+        file: 'D:\\Laboratoria\\LIM018-md-links\\pruebas\\carp_prueba2\\listo.md',
+        status: 200,
+        statusText: 'OK',
+        message: 'ok',
+      },
+    ];
+    mdlinks
+      .then((result) => {
+        expect(result).toEqual(validate);
+      });
+  });
+});
+describe('linea de comandos', () => {
+  it('', () => {
+
   });
 });
