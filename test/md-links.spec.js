@@ -1,10 +1,8 @@
 /* eslint-disable no-undef */
-// const fetch = require('node-fetch');
-const { describe } = require('yargs');
+const fetch = require('node-fetch');
 const func = require('../funciones.js');
 const mdLinks = require('../index.js');
 
-// jest.mock('node-fecth.js'); // activamos el mock;
 jest.mock('node-fetch');
 
 describe('path with extension md ', () => {
@@ -23,7 +21,6 @@ describe('path with extension md ', () => {
     expect(func.isMd(path2)).toBeFalsy();
   });
 });
-
 describe('extract Links', () => {
   it('archivo esta vacio', () => {
     const path1 = 'pruebas/carp_prueba1/prueba1.md';
@@ -53,7 +50,7 @@ describe('extract Links', () => {
   });
 });
 describe('validate Links', () => {
-  it('hace la consulta http con fecth y retorna un promesas', (done) => {
+  it('hacer la consulta http con fecth y retorna un promesas', (done) => {
     const path = 'pruebas/carp_prueba2/listo.md';
     const extract = func.extractLinks(func.readFile(path), path);
     const arrPromesas = func.validateLinks(extract);
@@ -81,40 +78,55 @@ describe('validate Links', () => {
         done();
       });
   });
-  // it('hace la consulta http con fetch que falla', (done) => {
-  //   const path = 'pruebas/carp_prueba1/break.md';
-  //   const extract = func.extractLinks(func.readFile(path), path);
-  //   // fetch.mockResolvedValueOnce({ status: 404, message: 'fail' });
-  //   const arrPromesas = func.validateLinks(extract);
-  //   const arr = [
-  //     {
-  //       href: 'https://jestjs.io/docs/es-ES/getting-stated',
-  //       text: 'Empezando con Jest - Documentación oficial',
-  //       file: 'pruebas/carp_prueba1/break.md',
-  //       status: 404,
-  //       statusText: 'Not Found',
-  //       message: 'fail',
-  //     },
-  //     {
-  //       href: 'https://jestjs.io/docs/es-ES/asynchonous',
-  //       text: 'Tests de código asincrónico con Jest - Documentación oficial',
-  //       file: 'pruebas/carp_prueba1/break.md',
-  //       status: 404,
-  //       statusText: 'Not Found',
-  //       message: 'fail',
-  //     },
-  //   ];
-  //   const obj = {
-  //     status: 404,
-  //     statusText: 'Not Found',
-  //   };
-  //   fetch.mockResolvedValue(obj);
-  //   arrPromesas
-  //     .then((response) => {
-  //       expect(response).toEqual(arr);
-  //       done();
-  //     });
-  // });
+  it('hacer la peticion con fecth y reterona fallido', () => {
+    const arrayParam = [
+      {
+        href: 'https://jestjs.io/docs/es-ES/getting-started',
+        text: 'Empezando con Jest - Documentación oficial',
+        file: 'D:\\LABORATORIA\\md-links\\LIM018-md-links\\miReadme.md',
+      },
+      {
+        href: 'https://jestjs.io/docs/es-ES/asynchronous',
+        text: 'Tests de código asincrónico con Jest - Documentación oficial',
+        file: 'D:\\LABORATORIA\\md-links\\LIM018-md-links\\miReadme.md',
+      },
+      {
+        href: 'https://jestjs.io/docs/es-ES/asynchronous',
+        text: 'Tests de código asincrónico con Jest - Documentación oficial',
+        file: 'D:\\LABORATORIA\\md-links\\LIM018-md-links\\miReadme.md',
+      },
+    ];
+    const arrResult = [
+      {
+        href: 'https://jestjs.io/docs/es-ES/getting-started',
+        text: 'Empezando con Jest - Documentación oficial',
+        file: 'D:\\LABORATORIA\\md-links\\LIM018-md-links\\miReadme.md',
+        status: 400,
+        statusText: 'fail',
+        message: 'fail',
+      },
+      {
+        href: 'https://jestjs.io/docs/es-ES/asynchronous',
+        text: 'Tests de código asincrónico con Jest - Documentación oficial',
+        file: 'D:\\LABORATORIA\\md-links\\LIM018-md-links\\miReadme.md',
+        status: 200,
+        statusText: 'OK',
+        message: 'ok',
+      },
+      {
+        href: 'https://jestjs.io/docs/es-ES/asynchronous',
+        text: 'Tests de código asincrónico con Jest - Documentación oficial',
+        file: 'D:\\LABORATORIA\\md-links\\LIM018-md-links\\miReadme.md',
+        status: 200,
+        statusText: 'OK',
+        message: 'ok',
+      },
+    ];
+    fetch.mockResolvedValueOnce({ status: 400, statusText: 'fail' });
+    func.validateLinks(arrayParam).then((result) => {
+      expect(result).toEqual(arrResult);
+    });
+  });
 });
 describe('stats Links', () => {
   it('Objetos con links totales y unicos', () => {
@@ -239,10 +251,5 @@ describe('Md Links', () => {
       .then((result) => {
         expect(result).toEqual(validate);
       });
-  });
-});
-describe('linea de comandos', () => {
-  it('', () => {
-
   });
 });
