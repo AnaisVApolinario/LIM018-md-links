@@ -10,19 +10,37 @@ const mdLinks = require('./index.js');
 // argv[4] = --stats
 
 const argv = process.argv.slice(2);
-
 const arrSinValSt = argv.filter((element) => {
   return element !== '--stats' && element !== '--validate';
 });
 const validate = argv.includes('--validate');
 const stats = argv.includes('--stats');
+const help = argv.includes('--help');
+if (arrSinValSt.length === 0) {
+  console.log('Porfavor ingrese la ruta o archivo que desea analizar');
+  console.log('** Para mayor información escriba --help, para revisar las distintas opciones **');
+}
+
+if (help && !stats && !validate) {
+  console.log(`
+  ⭕⭕⭕⭕⭕⭕⭕ OPCIONES ⭕⭕⭕⭕⭕⭕⭕
+
+  💨 md-links ${chalk.green('<path>')} ${chalk.red('=>')} Path hace referencia al archivo o directorio que desees analizar.
+  💨 md-links <path> ${chalk.green('--validate')} ${chalk.red('=>')} Esta opción se hace la petición HTTP.
+  💨 md-links <path> ${chalk.green('--stats')} ${chalk.red('=>')} Esta opción obtendra las estadísticas de los links encontrados, como el total de links y los links unicos.
+  💨 md-links <path> ${chalk.green('--validate --stats')} o ${chalk.green('--stats --validate')} ${chalk.red('=>')} Esta opción obtendra las estadísticas de los links encontrados, como el total de links, los links unicos y links rotos.
+  💨 md-links ${chalk.green('--help')} ${chalk.red('=>')} Muestra informacion acerca de las distintas opciones.
+
+  ${chalk.cyan('🔅🔅🔅 by AnaisVA 🔅🔅🔅')}
+  `);
+}
 arrSinValSt.forEach((path) => {
-  if (!stats) {
+  if (!stats && !help) {
     mdLinks(path, { validate })
       .then((result) => {
         console.log(result);
       }).catch(() => {
-        console.log(chalk.red.italic('Ingrese una ruta valida, por favor!!'));
+        console.log(chalk.red.italic('Ingrese una ruta o directorio valido, por favor!!'));
       });
   }
 
