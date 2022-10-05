@@ -85,19 +85,16 @@ const validateLinks = (linksExtract) => {
   const arrayPromesas = linksExtract.map((objLink) => {
     return fetch(objLink.href)
       .then((res) => {
-        if (res.status >= 200 && res.status < 400) {
-          return {
-            ...objLink,
-            status: res.status,
-            statusText: res.statusText,
-            message: 'ok',
-          };
-        }
         return {
           ...objLink,
           status: res.status,
-          statusText: res.statusText,
-          message: 'fail',
+          statusText: res.status < 400 ? 'ok' : 'fail',
+        };
+      }).catch(() => {
+        return {
+          ...objLink,
+          status: 'ERROR',
+          statusText: 'fail',
         };
       });
   });
@@ -122,7 +119,7 @@ const statsLinks = (linksExtract) => {
 // VER CUANTOS LINKS ESTAN ROTOS
 const brokenLinks = (linksValidate) => {
   return linksValidate.filter((link) => {
-    return link.message === 'fail';
+    return link.statusText === 'fail';
   }).length;
 };
 
