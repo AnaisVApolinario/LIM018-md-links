@@ -60,16 +60,14 @@ describe('validate Links', () => {
         text: 'Empezando con Jest - Documentación oficial',
         file: 'pruebas/carp_prueba2/listo.md',
         status: 200,
-        statusText: 'OK',
-        message: 'ok',
+        statusText: 'ok',
       },
       {
         href: 'https://jestjs.io/docs/es-ES/asynchronous',
         text: 'Tests de código asincrónico con Jest - Documentación oficial',
         file: 'pruebas/carp_prueba2/listo.md',
         status: 200,
-        statusText: 'OK',
-        message: 'ok',
+        statusText: 'ok',
       },
     ];
     arrPromesas
@@ -103,23 +101,20 @@ describe('validate Links', () => {
         file: 'D:\\LABORATORIA\\md-links\\LIM018-md-links\\miReadme.md',
         status: 400,
         statusText: 'fail',
-        message: 'fail',
       },
       {
         href: 'https://jestjs.io/docs/es-ES/asynchronous',
         text: 'Tests de código asincrónico con Jest - Documentación oficial',
         file: 'D:\\LABORATORIA\\md-links\\LIM018-md-links\\miReadme.md',
         status: 200,
-        statusText: 'OK',
-        message: 'ok',
+        statusText: 'ok',
       },
       {
         href: 'https://jestjs.io/docs/es-ES/asynchronous',
         text: 'Tests de código asincrónico con Jest - Documentación oficial',
         file: 'D:\\LABORATORIA\\md-links\\LIM018-md-links\\miReadme.md',
         status: 200,
-        statusText: 'OK',
-        message: 'ok',
+        statusText: 'ok',
       },
     ];
     fetch.mockResolvedValueOnce({ status: 400, statusText: 'fail' });
@@ -235,16 +230,14 @@ describe('Md Links', () => {
         text: 'Empezando con Jest - Documentación oficial',
         file: 'D:\\Laboratoria\\LIM018-md-links\\pruebas\\carp_prueba2\\listo.md',
         status: 200,
-        statusText: 'OK',
-        message: 'ok',
+        statusText: 'ok',
       },
       {
         href: 'https://jestjs.io/docs/es-ES/asynchronous',
         text: 'Tests de código asincrónico con Jest - Documentación oficial',
         file: 'D:\\Laboratoria\\LIM018-md-links\\pruebas\\carp_prueba2\\listo.md',
         status: 200,
-        statusText: 'OK',
-        message: 'ok',
+        statusText: 'ok',
       },
     ];
     mdlinks

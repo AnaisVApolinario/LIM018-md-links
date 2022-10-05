@@ -11,17 +11,17 @@ const mdLinks = require('./index.js');
 
 const argv = process.argv.slice(2);
 const arrSinValSt = argv.filter((element) => {
-  return element !== '--stats' && element !== '--validate';
+  return element !== '--stats' && element !== '--validate' && element !== '--help';
 });
 const validate = argv.includes('--validate');
 const stats = argv.includes('--stats');
 const help = argv.includes('--help');
-if (arrSinValSt.length === 0) {
+if (arrSinValSt.length === 0 && !help) {
   console.log(chalk.cyan('Porfavor ingrese la ruta o archivo que desea analizar'));
   console.log(chalk.italic.cyanBright(`** Para mayor información escriba ${chalk.italic.redBright.bold('--help')}, para revisar las distintas opciones **`));
 }
 
-if (help && !stats && !validate) {
+if (help) {
   console.log(`
   🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹    ${chalk.red('OPCIONES')}    🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹
 
@@ -58,7 +58,6 @@ arrSinValSt.forEach((path) => {
             console.log(chalk.italic.yellow('File:'), obj.file);
             console.log(chalk.italic.yellow('Status:'), obj.status);
             console.log(chalk.italic.yellow('Status Text:'), obj.statusText);
-            console.log(chalk.italic.yellow('Message:'), obj.message);
           }
         });
       }).catch(() => {
