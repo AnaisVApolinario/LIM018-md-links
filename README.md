@@ -7,7 +7,7 @@ Estos archivos `Markdown` normalmente contienen _links_ (vínculos/ligas) que
 muchas veces están rotos o ya no son válidos y eso perjudica mucho el valor de
 la información que se quiere compartir.
 
-Es por eso que surge "md-links" una herramienta que te permite obtener información entre otras opciones, sobre los links del archivo/directorio que sean de extensión '.md'.
+Es por eso que surge "md-links" una herramienta que te permite obtener información, sobre los links del archivo/directorio que sean de extensión '.md'.
 ## Diagrama de Flujo
 ![md-links](pruebas/imagenes/diagram.png)
 
@@ -33,18 +33,31 @@ Es por eso que surge "md-links" una herramienta que te permite obtener informaci
 
 ##  Ejemplos de Uso
 * md-links 
+
 ![md-links](pruebas/imagenes/md-links.png)
+
 * md-links --help
+
 ![md-links --help](pruebas/imagenes/help.png)
+
 * md-links <file>
+
 ![md-links](pruebas/imagenes/file.png)
+
 * md-links <directory>
+
 ![md-links](pruebas/imagenes/Dir.png)
+
 * md-links <file> --validate
+
 ![md-links](pruebas/imagenes/validate.png)
+
 * md-links <file> --stats
+
 ![md-links](pruebas/imagenes/stats.png)
+
 * md-links <file> --validate --stats
+
 ![md-links](pruebas/imagenes/validStats.png)
 
 ## Índice
