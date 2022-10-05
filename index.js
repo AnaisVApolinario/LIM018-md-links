@@ -4,14 +4,20 @@ const mdLinks = (path, options) => {
   return new Promise((resolve, reject) => {
     if (!func.isDirectory(path)) {
       if (!func.pathExists(path)) {
-        reject(new Error('La ruta ingresada no existe, ingrese una ruta valida !!'));
+        // eslint-disable-next-line prefer-promise-reject-errors
+        reject('La ruta ingresada no existe, ingrese una ruta valida !!');
       }
       const absolute = func.getAbsolutePath(path);
       if (!func.isMd(absolute)) {
-        reject(new Error('¡No hay archivos con extencion .md!'));
+        // eslint-disable-next-line prefer-promise-reject-errors
+        reject('¡No es un archivo con extencion .md!');
       }
       const fileRead = func.readFile(absolute);
       const extract = func.extractLinks(fileRead, absolute);
+      if (extract === []) {
+        // eslint-disable-next-line prefer-promise-reject-errors
+        reject('No hay links, o el archivos esta vacio');
+      }
       if (!options.validate) {
         resolve(extract);
       }

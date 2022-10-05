@@ -60,8 +60,8 @@ arrSinValSt.forEach((path) => {
             console.log(chalk.italic.yellow('Status Text:'), obj.statusText);
           }
         });
-      }).catch(() => {
-        console.log(chalk.red.italic('Ingrese una ruta o directorio valido, por favor!!'));
+      }).catch((error) => {
+        console.log(chalk.red.italic(error));
       });
   }
   if (stats && !validate) {
@@ -84,6 +84,3 @@ arrSinValSt.forEach((path) => {
       });
   }
 });
-module.exports = {
-  arrSinValSt,
-};

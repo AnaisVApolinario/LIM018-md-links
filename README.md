@@ -1,5 +1,15 @@
 # Markdown Links
 
+## Descripción
+Markdown es un lenguaje de marcado ligero muy popular entre developers. 
+Es usado en muchísimas plataformas que manejan texto plano (GitHub, foros, blogs, ...).
+Estos archivos `Markdown` normalmente contienen _links_ (vínculos/ligas) que
+muchas veces están rotos o ya no son válidos y eso perjudica mucho el valor de
+la información que se quiere compartir.
+
+Es por eso que surge "md-links" una herramienta que te permite obtener información entre otras opciones, sobre los links del archivo/directorio que sean de extensión '.md'.
+## Diagrama de Flujo
+![md-links](pruebas/imagenes/diagram.png)
 ## Índice
 
 * [1. Preámbulo](#1-preámbulo)
