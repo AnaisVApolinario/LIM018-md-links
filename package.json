@@ -14,7 +14,7 @@
     "start": "node index",
     "eslint": "eslint --ext .js test/",
     "pretest": "npm run eslint",
-    "md-links": "cli.js"
+    "md-links": "src/cli.js"
   },
   "repository": {
     "type": "git",
@@ -24,7 +24,7 @@
   "author": "Anais Valverde",
   "license": "ISC",
   "bin": {
-    "md-links": "./cli.js"
+    "md-links": "src/cli.js"
   },
   "bugs": {
     "url": "https://github.com/AnaisVApolinario/LIM018-md-links/issues"

@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 const fetch = require('node-fetch');
-const func = require('../funciones.js');
-const mdLinks = require('../index.js');
+const func = require('../src/funciones.js');
+const mdLinks = require('../src/index.js');
 
 jest.mock('node-fetch');
 
@@ -144,9 +144,7 @@ describe('stats Links', () => {
 
 describe('Archivos en directorios', () => {
   it('leer directorios', () => {
-    // eslint-disable-next-line max-len
-    // const files = ['carp_prueba1', 'break.md', 'prueba1.md', 'script.js', 'carp_prueba2', 'listo.md', 'masLinks.md', 'prueba2.md', 'rox.txt', 'repeat.md'];
-    const files = ['carp_prueba1', 'carp_prueba2', 'repeat.md'];
+    const files = ['carp_prueba1', 'carp_prueba2', 'imagenes', 'repeat.md'];
     expect(func.readDir('pruebas')).toEqual(files);
   });
   it('extraer archivos de todas las carpetas', () => {
@@ -158,6 +156,14 @@ describe('Archivos en directorios', () => {
       'pruebas\\carp_prueba2\\listo.md',
       'pruebas\\carp_prueba2\\prueba2.md',
       'pruebas\\carp_prueba2\\rox.txt',
+      'pruebas\\imagenes\\diagram.png',
+      'pruebas\\imagenes\\Dir.png',
+      'pruebas\\imagenes\\file.png',
+      'pruebas\\imagenes\\fileInDir.png',
+      'pruebas\\imagenes\\help.png',
+      'pruebas\\imagenes\\stats.png',
+      'pruebas\\imagenes\\validate.png',
+      'pruebas\\imagenes\\validStats.png',
       'pruebas\\repeat.md',
     ]);
   });
@@ -168,6 +174,14 @@ describe('Archivos en directorios', () => {
       'pruebas\\carp_prueba2\\listo.md',
       'pruebas\\carp_prueba2\\prueba2.md',
       'pruebas\\carp_prueba2\\rox.txt',
+      'pruebas\\imagenes\\diagram.png',
+      'pruebas\\imagenes\\Dir.png',
+      'pruebas\\imagenes\\file.png',
+      'pruebas\\imagenes\\fileInDir.png',
+      'pruebas\\imagenes\\help.png',
+      'pruebas\\imagenes\\stats.png',
+      'pruebas\\imagenes\\validate.png',
+      'pruebas\\imagenes\\validStats.png',
       'pruebas\\repeat.md',
     ];
     expect(func.filtrarRutasMd(arrFiles)).toEqual([
