@@ -12,7 +12,7 @@ Es por eso que surge "md-links" una herramienta que te permite obtener informaci
 ![md-links](pruebas/imagenes/diagram.png)
 
 ## Instalación
-* Ejecutar el siguiente comando: npm i anais_va/md-links
+* Ejecutar el siguiente comando: npm i md-links-anaisva
 
 ## Uso
 * El comando cli es : md-links < path >.
