@@ -39,7 +39,7 @@ if (help && !stats && !validate) {
   `);
 }
 arrSinValSt.forEach((path) => {
-  if (!stats && !help) {
+  if (!stats) {
     mdLinks(path, { validate })
       .then((result) => {
         result.forEach((obj) => {
@@ -61,12 +61,10 @@ arrSinValSt.forEach((path) => {
             console.log(chalk.italic.yellow('Message:'), obj.message);
           }
         });
-        // console.log(result);
       }).catch(() => {
         console.log(chalk.red.italic('Ingrese una ruta o directorio valido, por favor!!'));
       });
   }
-
   if (stats && !validate) {
     mdLinks(path, { validate })
       .then((result) => {
@@ -87,3 +85,6 @@ arrSinValSt.forEach((path) => {
       });
   }
 });
+module.exports = {
+  arrSinValSt,
+};
