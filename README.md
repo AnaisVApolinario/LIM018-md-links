@@ -15,7 +15,7 @@ Es por eso que surge "md-links" una herramienta que te permite obtener informaci
 * Ejecutar el siguiente comando: npm i anais_va/md-links
 
 ## Uso
-* El comando cli es : md-links <path>.
+* El comando cli es : md-links < path >.
 * Este comando sirve tanto para archivos como para directorios, al ingresar el comando md-links <path> 
   lo que obtendras es un listado de links cada uno con las tres siguientes opciones : 
   1. href -> Haciendo referencia al link.
@@ -40,23 +40,23 @@ Es por eso que surge "md-links" una herramienta que te permite obtener informaci
 
 ![md-links --help](pruebas/imagenes/help.png)
 
-* md-links <file>
+* md-links < file >
 
 ![md-links](pruebas/imagenes/file.png)
 
-* md-links <directory>
+* md-links < directory >
 
 ![md-links](pruebas/imagenes/Dir.png)
 
-* md-links <file> --validate
+* md-links < file > --validate
 
 ![md-links](pruebas/imagenes/validate.png)
 
-* md-links <file> --stats
+* md-links < file > --stats
 
 ![md-links](pruebas/imagenes/stats.png)
 
-* md-links <file> --validate --stats
+* md-links < file > --validate --stats
 
 ![md-links](pruebas/imagenes/validStats.png)
 
