@@ -12,11 +12,11 @@ Es por eso que surge "md-links" una herramienta que te permite obtener informaci
 ![md-links](pruebas/imagenes/diagram.png)
 
 ## Instalación
-* Ejecutar el siguiente comando: npm i md-links-anaisva
+* Ejecutar el siguiente comando: `npm i md-links-anaisva`
 
 ## Uso
-* El comando cli es : md-links < path >.
-* Este comando sirve tanto para archivos como para directorios, al ingresar el comando md-links <path> 
+* El comando cli es : `md-links < path >`.
+* Este comando sirve tanto para archivos como para directorios, al ingresar el comando *md-links <path>* 
   lo que obtendras es un listado de links cada uno con las tres siguientes opciones : 
   1. href -> Haciendo referencia al link.
   2. text -> El texto que contiene cada link.
