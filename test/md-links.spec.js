@@ -161,6 +161,7 @@ describe('Archivos en directorios', () => {
       'pruebas\\imagenes\\file.png',
       'pruebas\\imagenes\\fileInDir.png',
       'pruebas\\imagenes\\help.png',
+      'pruebas\\imagenes\\md-links.png',
       'pruebas\\imagenes\\stats.png',
       'pruebas\\imagenes\\validate.png',
       'pruebas\\imagenes\\validStats.png',
